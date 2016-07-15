@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <table>
+        <tr>
+            <td>
+                <label>Select Percent:</label>
+                <select id="mySelect" onchange="draw()"></select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <canvas id="myCanvas" width="640" height="480" style="border:1px solid #c3c3c3;">
+                    Your browser does not support the HTML5 canvas tag.
+                </canvas>
+            </td>
+        </tr>
+    </table>
+    <script>
+var SqData = [
+  { Extent: 0, BlackPix: 0, QtySq1: 0, WidSq1: 0, HitSq1: 0, QtySq2: 0, WidSq2: 0, HitSq2: 0, QtySq3: 0, WidSq3: 0, HitSq3: 0 },
+  { Extent: 0.05, BlackPix: 153.6, QtySq1: 4, WidSq1: 3, HitSq1: 2, QtySq2: 4, WidSq2: 5, HitSq2: 3, QtySq3: 2, WidSq3: 7, HitSq3: 4 },
+  { Extent: 0.5, BlackPix: 1536, QtySq1: 4, WidSq1: 8, HitSq1: 5, QtySq2: 4, WidSq2: 17, HitSq2: 11, QtySq3: 2, WidSq3: 24, HitSq3: 15 },
+  { Extent: 1, BlackPix: 3072, QtySq1: 4, WidSq1: 12, HitSq1: 7, QtySq2: 4, WidSq2: 24, HitSq2: 15, QtySq3: 2, WidSq3: 33, HitSq3: 20 },
+  { Extent: 2, BlackPix: 6144, QtySq1: 4, WidSq1: 17, HitSq1: 11, QtySq2: 4, WidSq2: 33, HitSq2: 20, QtySq3: 2, WidSq3: 47, HitSq3: 29 },
+  { Extent: 3, BlackPix: 9216, QtySq1: 4, WidSq1: 20, HitSq1: 12, QtySq2: 4, WidSq2: 41, HitSq2: 25, QtySq3: 2, WidSq3: 58, HitSq3: 36 },
+  { Extent: 4, BlackPix: 12288, QtySq1: 4, WidSq1: 24, HitSq1: 15, QtySq2: 4, WidSq2: 47, HitSq2: 29, QtySq3: 2, WidSq3: 66, HitSq3: 41 },
+  { Extent: 5, BlackPix: 15360, QtySq1: 4, WidSq1: 26, HitSq1: 16, QtySq2: 4, WidSq2: 53, HitSq2: 33, QtySq3: 2, WidSq3: 74, HitSq3: 46 },
+  { Extent: 8, BlackPix: 24576, QtySq1: 4, WidSq1: 33, HitSq1: 20, QtySq2: 4, WidSq2: 66, HitSq2: 41, QtySq3: 2, WidSq3: 94, HitSq3: 58 },
+  { Extent: 10, BlackPix: 30720, QtySq1: 4, WidSq1: 37, HitSq1: 23, QtySq2: 4, WidSq2: 74, HitSq2: 46, QtySq3: 2, WidSq3: 105, HitSq3: 65 },
+  { Extent: 15, BlackPix: 46080, QtySq1: 4, WidSq1: 46, HitSq1: 28, QtySq2: 4, WidSq2: 91, HitSq2: 56, QtySq3: 2, WidSq3: 129, HitSq3: 80 },
+  { Extent: 20, BlackPix: 61440, QtySq1: 4, WidSq1: 53, HitSq1: 33, QtySq2: 4, WidSq2: 105, HitSq2: 65, QtySq3: 2, WidSq3: 149, HitSq3: 92 },
+  { Extent: 25, BlackPix: 76800, QtySq1: 4, WidSq1: 59, HitSq1: 36, QtySq2: 4, WidSq2: 118, HitSq2: 73, QtySq3: 2, WidSq3: 166, HitSq3: 103 },
+  { Extent: 30, BlackPix: 92160, QtySq1: 4, WidSq1: 64, HitSq1: 40, QtySq2: 4, WidSq2: 129, HitSq2: 80, QtySq3: 2, WidSq3: 182, HitSq3: 112 },
+  { Extent: 35, BlackPix: 107520, QtySq1: 4, WidSq1: 70, HitSq1: 43, QtySq2: 4, WidSq2: 139, HitSq2: 86, QtySq3: 2, WidSq3: 197, HitSq3: 122 },
+  { Extent: 40, BlackPix: 122880, QtySq1: 4, WidSq1: 74, HitSq1: 46, QtySq2: 4, WidSq2: 149, HitSq2: 92, QtySq3: 2, WidSq3: 210, HitSq3: 130 },
+  { Extent: 50, BlackPix: 153600, QtySq1: 4, WidSq1: 83, HitSq1: 51, QtySq2: 4, WidSq2: 166, HitSq2: 103, QtySq3: 2, WidSq3: 235, HitSq3: 145 },
+  { Extent: 60, BlackPix: 184320, QtySq1: 4, WidSq1: 91, HitSq1: 56, QtySq2: 4, WidSq2: 182, HitSq2: 112, QtySq3: 2, WidSq3: 257, HitSq3: 159 },
+  { Extent: 70, BlackPix: 215040, QtySq1: 4, WidSq1: 98, HitSq1: 61, QtySq2: 4, WidSq2: 197, HitSq2: 122, QtySq3: 2, WidSq3: 278, HitSq3: 172 },
+  { Extent: 80, BlackPix: 245760, QtySq1: 4, WidSq1: 105, HitSq1: 65, QtySq2: 4, WidSq2: 210, HitSq2: 130, QtySq3: 2, WidSq3: 297, HitSq3: 184 },
+  { Extent: 90, BlackPix: 276480, QtySq1: 4, WidSq1: 111, HitSq1: 69, QtySq2: 4, WidSq2: 223, HitSq2: 138, QtySq3: 2, WidSq3: 315, HitSq3: 195 },
+  { Extent: 100, BlackPix: 307200, QtySq1: 4, WidSq1: 118, HitSq1: 73, QtySq2: 4, WidSq2: 235, HitSq2: 145, QtySq3: 2, WidSq3: 332, HitSq3: 205 }
+]
+
+
+for (i = 0; i < SqData.length ; i++) {
+    var x = document.getElementById("mySelect");
+    var option = document.createElement("option");
+    option.text = SqData[i]["Extent"];
+    option.value = SqData[i]["Extent"];
+    x.add(option);
+}
+
+function draw() {
+    var ddl = document.getElementById("mySelect");
+    var i = 0;
+    var perIndex = ddl.selectedIndex;
+    var x = 0;
+    var y = 0;
+
+    var perCent = ddl.options[ddl.selectedIndex].value;
+
+    if (perCent <= 60) {
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#fffff";
+        ctx.clearRect(0, 0, 640, 480);
+        ctx.fillStyle = "#00000";
+      
+        var x1 = (SqData[perIndex]["HitSq3"] / 3) + SqData[perIndex]["WidSq2"]+1;
+        var y1 = 480 - SqData[perIndex]["HitSq3"] - 1;
+        for (i = 0; i < SqData[perIndex]["QtySq3"]; i++) {
+            if (i == 0)
+                ctx.fillRect(x, y, SqData[perIndex]["HitSq3"], SqData[perIndex]["WidSq3"]);
+            if (i == 1)
+                ctx.fillRect(x1, y1, SqData[perIndex]["WidSq3"], SqData[perIndex]["HitSq3"]);
+        }
+        y = 5;
+        x = SqData[perIndex]["HitSq3"];
+        for (i = 0; i < SqData[perIndex]["QtySq2"]; i++) {
+            if (i == 0)
+                ctx.fillRect(x, y, SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+            if (i == 1)
+                ctx.fillRect((SqData[perIndex]["HitSq3"] / 3), SqData[perIndex]["WidSq3"], SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+            if (i == 2)
+                ctx.fillRect(x1 + SqData[perIndex]["WidSq3"], y1 - (SqData[perIndex]["HitSq2"] / 3), SqData[perIndex]["HitSq2"], SqData[perIndex]["WidSq2"]);
+            if (i == 3)
+                ctx.fillRect((x1 + SqData[perIndex]["WidSq3"] - (SqData[perIndex]["WidSq2"] / 3)), ((y1 - (SqData[perIndex]["HitSq2"] / 3) - SqData[perIndex]["HitSq2"])), SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+        }
+        for (i = 0; i < SqData[perIndex]["QtySq1"]; i++) {
+
+            if (i == 0)
+                ctx.fillRect(x + SqData[perIndex]["WidSq2"] + (SqData[perIndex]["WidSq1"] / 6) - SqData[perIndex]["WidSq1"], y + SqData[perIndex]["HitSq2"], SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            if (i == 1)
+                ctx.fillRect((x + SqData[perIndex]["WidSq2"] + (SqData[perIndex]["WidSq1"] / 6)), y + SqData[perIndex]["HitSq2"] - (SqData[perIndex]["HitSq1"] - (SqData[perIndex]["HitSq1"] / 8)), SqData[perIndex]["HitSq1"], SqData[perIndex]["WidSq1"]);
+            if (i == 2)
+                ctx.fillRect(x1 - SqData[perIndex]["WidSq1"], y1 + (SqData[perIndex]["HitSq1"]/1.1), SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            if (i == 3)
+            {
+                var sX = (x1 + SqData[perIndex]["WidSq3"] + SqData[perIndex]["HitSq2"]) 
+                sX = (sX + SqData[perIndex]["WidSq1"]) > 640 ? sX + SqData[perIndex]["WidSq1"] - 643 : sX;
+                ctx.fillRect(sX, y1 + SqData[perIndex]["HitSq3"] - (SqData[perIndex]["WidSq2"] / 3), SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            }
+        }
+
+    }
+    else {
+
+        for (i = 0; i < SqData.length ; i++) {
+            if (SqData[i]["Extent"] == (100 - perCent)) {
+                perIndex = i;
+                break;
+            }
+        }
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#fffff";
+        ctx.fillRect(0, 0, 640, 480);
+        ctx.fillStyle = "#00000";       
+
+        var x1 = (SqData[perIndex]["HitSq3"] / 3) + SqData[perIndex]["WidSq2"] + 1;
+        var y1 = 480 - SqData[perIndex]["HitSq3"] - 1;
+        for (i = 0; i < SqData[perIndex]["QtySq3"]; i++) {
+            if (i == 0)
+                ctx.clearRect(x, y, SqData[perIndex]["HitSq3"], SqData[perIndex]["WidSq3"]);
+            if (i == 1)
+                ctx.clearRect(x1, y1, SqData[perIndex]["WidSq3"], SqData[perIndex]["HitSq3"]);
+        }
+        y = 5;
+        x = SqData[perIndex]["HitSq3"];
+        for (i = 0; i < SqData[perIndex]["QtySq2"]; i++) {
+            if (i == 0)
+                ctx.clearRect(x, y, SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+            if (i == 1)
+                ctx.clearRect((SqData[perIndex]["HitSq3"] / 3), SqData[perIndex]["WidSq3"], SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+            if (i == 2)
+                ctx.clearRect(x1 + SqData[perIndex]["WidSq3"], y1 - (SqData[perIndex]["HitSq2"] / 3), SqData[perIndex]["HitSq2"], SqData[perIndex]["WidSq2"]);
+            if (i == 3)
+                ctx.clearRect((x1 + SqData[perIndex]["WidSq3"] - (SqData[perIndex]["WidSq2"] / 3)), ((y1 - (SqData[perIndex]["HitSq2"] / 3) - SqData[perIndex]["HitSq2"])), SqData[perIndex]["WidSq2"], SqData[perIndex]["HitSq2"]);
+        }
+        for (i = 0; i < SqData[perIndex]["QtySq1"]; i++) {
+
+            if (i == 0)
+                ctx.clearRect(x + SqData[perIndex]["WidSq2"] + (SqData[perIndex]["WidSq1"] / 6) - SqData[perIndex]["WidSq1"], y + SqData[perIndex]["HitSq2"], SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            if (i == 1)
+                ctx.clearRect((x + SqData[perIndex]["WidSq2"] + (SqData[perIndex]["WidSq1"] / 6)), y + SqData[perIndex]["HitSq2"] - (SqData[perIndex]["HitSq1"] - (SqData[perIndex]["HitSq1"] / 8)), SqData[perIndex]["HitSq1"], SqData[perIndex]["WidSq1"]);
+            if (i == 2)
+                ctx.clearRect(x1 - SqData[perIndex]["WidSq1"], y1 + (SqData[perIndex]["HitSq1"] / 1.1), SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            if (i == 3) {
+                var sX = (x1 + SqData[perIndex]["WidSq3"] + SqData[perIndex]["HitSq2"])
+                sX = (sX + SqData[perIndex]["WidSq1"]) > 640 ? sX + SqData[perIndex]["WidSq1"] - 643 : sX;
+                ctx.clearRect(sX, y1 + SqData[perIndex]["HitSq3"] - (SqData[perIndex]["WidSq2"] / 3), SqData[perIndex]["WidSq1"], SqData[perIndex]["HitSq1"]);
+            }
+        }
+    }
+}
+
+
+
+    </script>
+</body>
+</html>
+
